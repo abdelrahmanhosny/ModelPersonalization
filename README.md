@@ -3,13 +3,19 @@
 Improving the performance of DL models for individual users by re-training on a user's data on the edge.
 
 
+## Setup
+
+```Python
+python setup.py install
+```
+
 ## QMNIST Dataset
 
 Divide the datset by the writer ID.
 
 ```Python
-python preprocess/filter_by_user.py --download --dataset=train
-python preprocess/filter_by_user.py --download --dataset=test
+python filter_by_user.py --download --dataset=train
+python filter_by_user.py --download --dataset=test
 ```
 
 The resulting user-specific datasets will be under `data/QMNIST/train` and `data/QMNIST/test`. 

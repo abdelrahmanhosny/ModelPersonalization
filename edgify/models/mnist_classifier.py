@@ -7,10 +7,10 @@ from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torchvision import datasets, transforms
 
-class Net(nn.Module):
+class MNISTClassifier(nn.Module):
 
     def __init__(self, num_classes=10):
-        super(Net, self).__init__()
+        super(MNISTClassifier, self).__init__()
         self.features = nn.Sequential(
             nn.Conv2d(1, 32, kernel_size=3, stride=1),
             nn.ReLU(inplace=True),
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     test_dataset = datasets.QMNIST('./data', what='test10k', download=args.download, compat=True, transform=transform)
     test_loader = DataLoader(test_dataset, **test_kwargs)
 
-    model = Net().to(device)
+    model = MNISTClassifier().to(device)
     optimizer = Adam(model.parameters(), lr=args.lr)
 
     for epoch in range(1, args.epochs + 1):    

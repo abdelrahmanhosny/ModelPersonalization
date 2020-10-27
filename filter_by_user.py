@@ -5,7 +5,7 @@ import os
 from collections import defaultdict
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
-from qmnist_writer_dataset import WriterQMNIST
+from edgify.utils import WriterQMNIST
 
 
 if __name__ == "__main__":
