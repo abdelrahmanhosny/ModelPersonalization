@@ -18,7 +18,7 @@ if __name__ == "__main__":
                         help='Directory where the per-writer test dataset was created')
     parser.add_argument('--writer_id', type=int, default=18, metavar='N', \
         help='input batch size for training (default: 64)')
-    parser.add_argument('--model', type=str, default='data/mnist_classifier-50.pt',
+    parser.add_argument('--model', type=str, default='data/mnist_classifier-10.pt',
                         help='PyTorch model to test')
     parser.add_argument('--batch_size', type=int, default=64, metavar='N', \
         help='input batch size for training (default: 64)')
@@ -138,4 +138,6 @@ if __name__ == "__main__":
         ))
 
     average_improvement = sum(improvements) / len(improvements)
+    print('Min Improvement: {:.2f}%'.format(min(improvements)))
+    print('Max Improvement: {:.2f}%'.format(max(improvements)))
     print('Average Improvement: {:.2f}%'.format(average_improvement))
