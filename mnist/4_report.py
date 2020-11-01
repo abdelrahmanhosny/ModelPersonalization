@@ -7,9 +7,9 @@ from edgify.utils import WriterQMNIST
 
 if __name__ == "__main__":
     for writer_id in range(131):
-        with open(os.path.join('data', 'QMNIST', 'model-subject-out', str(writer_id), 'accuracy_before.txt'), 'r') as f:
+        with open(os.path.join('data', 'QMNIST', 'models-subject-out', str(writer_id), 'accuracy_before.txt'), 'r') as f:
             accuracy_before = f.readline().strip()
-        with open(os.path.join('data', 'QMNIST', 'model-subject-out', str(writer_id), 'accuracy_after.txt'), 'r') as f:
+        with open(os.path.join('data', 'QMNIST', 'models-subject-out', str(writer_id), 'accuracy_after.txt'), 'r') as f:
             accuracy_after = f.readline().strip()
         print(accuracy_before, accuracy_after)
         
