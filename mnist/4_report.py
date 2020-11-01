@@ -34,7 +34,7 @@ if __name__ == "__main__":
                 for sample in f:
                     samples += 1
                     ts, pstate, util_gpu, util_mem, temp_gpu, temp_mem, power = sample.strip().split(',')
-                    if util_gpu == '0 %' and util_mem == '0 %':
+                    if util_gpu.strip() == '0 %' and util_mem == '0 %'.strip():
                         # idle state
                         writer_idle_power += float(power.strip().split(' ')[0])
                     else:
