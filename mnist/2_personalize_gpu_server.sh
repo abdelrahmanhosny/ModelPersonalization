@@ -8,7 +8,7 @@ pid=$!
 
 sleep 5        # used to report idle power when util is zero
 
-python mnist/2_personalize.py --log-interval=1 --writer_id=$WRITER_ID --batch_size=$BATCH_SIZE |& tee data/QMNIST/models-subject-out/$WRITER_ID/personalize-server-gpu-$BATCH_SIZE.log
+time python mnist/2_personalize.py --log-interval=1 --writer_id=$WRITER_ID --batch_size=$BATCH_SIZE |& tee data/QMNIST/models-subject-out/$WRITER_ID/personalize-server-gpu-$BATCH_SIZE.log
 
 sleep 5        # used to report idle power when util is zero
 
