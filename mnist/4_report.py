@@ -11,7 +11,7 @@ if __name__ == "__main__":
             accuracy_before = f.readline().strip()
         with open(os.path.join('data', 'QMNIST', 'models-subject-out', str(writer_id), 'accuracy_after.txt'), 'r') as f:
             accuracy_after = f.readline().strip()
-        print(accuracy_before, accuracy_after)
+        print(accuracy_before, ', ', accuracy_after)
         
     print()
     batch_sizes = [64, 128, 256, 512, 1024]
@@ -33,15 +33,15 @@ if __name__ == "__main__":
 
                 for sample in f:
                     samples += 1
-                    ts, pstate, util_gpu, util_mem, temp_gpu, temp_mem, power = list(filter(lambda  x: x.strip(), sample.strip().split(',')))
+                    ts, pstate, util_gpu, util_mem, temp_gpu, temp_mem, power = sample.strip().split(',')
                     if util_gpu == '0 %' and util_mem == '0 %':
                         # idle state
-                        writer_idle_power += float(power.split(' ')[0])
+                        writer_idle_power += float(power.strip().split(' ')[0])
                     else:
-                        writer_active_power += float(power.split(' ')[0])
-                        writer_gpu_util += float(util_gpu.split(' ')[0])
-                        writer_mem_util += float(util_mem.split(' ')[0])
-                        writer_temp += float(temp_gpu)
+                        writer_active_power += float(power.strip().split(' ')[0])
+                        writer_gpu_util += float(util_gpu.strip().split(' ')[0])
+                        writer_mem_util += float(util_mem.strip().split(' ')[0])
+                        writer_temp += float(temp_gpu.strip())
                 
                 gpu_utils.append(writer_gpu_util / samples)
                 mem_utils.append(writer_mem_util / samples)
