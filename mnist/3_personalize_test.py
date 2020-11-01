@@ -51,7 +51,7 @@ if __name__ == "__main__":
     test_dataset = torch.load(os.path.join(args.data_dir, 'test', 'w' + str(args.writer_id) + '.pth' ))
     test_dataloader = DataLoader(test_dataset, **test_kwargs)
 
-    model = MNISTClassifier()
+    model = MNISTClassifier().to(device)
     model_path = os.path.join(args.data_dir, 'models-subject-out', str(args.writer_id), 'personalized-model.pt')
     model.load_state_dict(torch.load(model_path, map_location=device))
 
@@ -62,6 +62,7 @@ if __name__ == "__main__":
     with torch.no_grad():
         for data, target in test_dataloader:
             data = data.reshape((-1, 1, 28, 28))
+            data, target = data.to(device), target.to(device)
             output = model(data)
             test_loss += F.nll_loss(output, target, reduction='sum').item()
             pred = output.argmax(dim=1, keepdim=True)

@@ -80,7 +80,7 @@ if __name__ == "__main__":
     print('Loaded a training dataset of size: ', len(train_dataset))
     print('Loaded a writer test dataset of size: ', len(test_dataset))
 
-    model = MNISTClassifier()
+    model = MNISTClassifier().to(device)
 
     # train
     model.train()
@@ -101,8 +101,6 @@ if __name__ == "__main__":
                     epoch, batch_idx * len(data), len(train_dataloader.dataset),
                     100. * batch_idx / len(train_dataloader), loss.item()
                 ))
-            break
-        break
 
     # test on writer
     model.eval()
@@ -111,6 +109,7 @@ if __name__ == "__main__":
     with torch.no_grad():
         for data, target in test_dataloader:
             data = data.reshape((-1, 1, 28, 28))
+            data, target = data.to(device), target.to(device)
             output = model(data)
             test_loss += F.nll_loss(output, target, reduction='sum').item()
             pred = output.argmax(dim=1, keepdim=True)

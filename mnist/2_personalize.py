@@ -51,7 +51,7 @@ if __name__ == "__main__":
     train_dataset = torch.load(os.path.join(args.data_dir, 'train', 'w' + str(args.writer_id) + '.pth' ))
     train_dataloader = DataLoader(train_dataset, **train_kwargs)
 
-    model = MNISTClassifier()
+    model = MNISTClassifier().to(device)
     model_path = os.path.join(args.data_dir, 'models-subject-out', str(args.writer_id), 'general-model.pt')
     model.load_state_dict(torch.load(model_path, map_location=device))
 
