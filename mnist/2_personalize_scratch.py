@@ -110,7 +110,7 @@ if __name__ == "__main__":
         ))
 
         # logging and saving
-        save_dir = os.path.join(data_dir, 'models-subject-out', str(writer_id))
+        save_dir = os.path.join(args.data_dir, 'models-subject-out', str(writer_id))
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         
