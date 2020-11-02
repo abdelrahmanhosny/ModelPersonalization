@@ -57,8 +57,6 @@ if __name__ == "__main__":
         train_kwargs.update(cuda_kwargs)
         test_kwargs.update(cuda_kwargs)
 
-    
-
     for writer_id in range(131):
         print('Building dataset for writer ', writer_id)
         train_dataset = torch.load(os.path.join(args.data_dir, 'train', 'w' + str(writer_id) + '.pth' ))
@@ -107,12 +105,12 @@ if __name__ == "__main__":
         test_loss /= len(test_dataloader.dataset)
 
         print('Writer {}: Accuracy: {}/{} ({:.2f}%)'.format(
-            args.writer_id, correct, len(test_dataloader.dataset),
+            writer_id, correct, len(test_dataloader.dataset),
             100. * correct / len(test_dataloader.dataset)
         ))
 
         # logging and saving
-        save_dir = os.path.join(args.data_dir, 'models-subject-out', str(args.writer_id))
+        save_dir = os.path.join(data_dir, 'models-subject-out', str(writer_id))
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         
