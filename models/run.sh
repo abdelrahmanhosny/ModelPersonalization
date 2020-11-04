@@ -9,6 +9,6 @@ mkdir -p $LOG_DIR
 
 tegrastats --start --logfile $LOG_DIR/$BATCH_SIZE.txt
 
-time python models/train.py --batch_size=$BATCH_SIZE --download
+time python models/train.py --batch_size=$BATCH_SIZE --output_dir=$LOG_DIR --download
 
 tegrastats --stop

@@ -1,11 +1,12 @@
 import os
 import argparse
+import cProfile, pstats
 import torch
 import torchvision
 import torch.nn.functional as F
 import torch.nn as nn
-import torchvision.transforms as transforms
 
+from datetime import datetime
 from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torchvision import datasets, transforms
@@ -18,6 +19,8 @@ if __name__ == "__main__":
     # model parameters
     parser.add_argument('--batch_size', type=int, default=64, metavar='N', \
         help='input batch size for training (default: 64)')
+    parser.add_argument('--output_dir', type=str, required=True, \
+        help='output directory')
     parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
                         help='learning rate (default: 0.01)')
     parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -42,6 +45,10 @@ if __name__ == "__main__":
 
     
     # data loading and transform
+    started = datetime.now()
+    print('Data Loading @ ', datetime.now())
+    pr = cProfile.Profile()
+    pr.enable()
     transform = transforms.Compose(
         [
             transforms.ToTensor(),
@@ -62,18 +69,42 @@ if __name__ == "__main__":
     )
 
     model = model.to(device)
-    
+
+    pr.disable()
+    with open(os.path.join(args.output_dir, str(args.batch_size) + '_dataloading.prof'), 'w') as f:
+        ps = pstats.Stats(pr, stream=f).sort_stats(pstats.SortKey.CUMULATIVE)
+        ps.print_stats()
+    pr.clear()
+
     # train
+    print('Training @ ', datetime.now())
     model.train()
     optimizer = Adam(model.parameters(), lr=args.lr)
 
+    forward_profiler = cProfile.Profile()
+    backward_profiler = cProfile.Profile()
+
     for inputs, labels in train_dataloader:
         # forward pass
+        forward_profiler.enable()
         inputs, labels = inputs.to(device), labels.to(device)
         optimizer.zero_grad()
         output = model(inputs)
         loss = F.cross_entropy(output, labels)
+        forward_profiler.disable()
 
         # backpropagation
+        backward_profiler.enable()
         loss.backward()
         optimizer.step()
+        backward_profiler.disable()
+    
+    with open(os.path.join(args.output_dir, str(args.batch_size) + '_train_forward.prof'), 'w') as f:
+        ps = pstats.Stats(forward_profiler, stream=f).sort_stats(pstats.SortKey.CUMULATIVE)
+        ps.print_stats()
+    with open(os.path.join(args.output_dir, str(args.batch_size) + '_train_backprob.prof'), 'w') as f:
+        ps = pstats.Stats(backward_profiler, stream=f).sort_stats(pstats.SortKey.CUMULATIVE)
+        ps.print_stats()
+
+    finished = datetime.now()
+    print('Finished @ ', finished, ' after ', finished - started)
