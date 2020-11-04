@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     pr.disable()
     with open(os.path.join(args.output_dir, str(args.batch_size) + '_dataloading.prof'), 'w') as f:
-        ps = pstats.Stats(pr, stream=f).sort_stats(pstats.SortKey.CUMULATIVE)
+        ps = pstats.Stats(pr, stream=f).sort_stats('cumulative')
         ps.print_stats()
     pr.clear()
 
@@ -100,10 +100,10 @@ if __name__ == "__main__":
         backward_profiler.disable()
     
     with open(os.path.join(args.output_dir, str(args.batch_size) + '_train_forward.prof'), 'w') as f:
-        ps = pstats.Stats(forward_profiler, stream=f).sort_stats(pstats.SortKey.CUMULATIVE)
+        ps = pstats.Stats(forward_profiler, stream=f).sort_stats('cumulative')
         ps.print_stats()
     with open(os.path.join(args.output_dir, str(args.batch_size) + '_train_backprob.prof'), 'w') as f:
-        ps = pstats.Stats(backward_profiler, stream=f).sort_stats(pstats.SortKey.CUMULATIVE)
+        ps = pstats.Stats(backward_profiler, stream=f).sort_stats('cumulative')
         ps.print_stats()
 
     finished = datetime.now()
