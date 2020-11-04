@@ -25,6 +25,8 @@ if __name__ == "__main__":
                         help='learning rate (default: 0.01)')
     parser.add_argument('--no-cuda', action='store_true', default=False,
                         help='disables CUDA training')
+    parser.add_argument('--freeze', action='store_true', default=False,
+                        help='freezes feature extraction layers')
     parser.add_argument('--download', action='store_true', default=False,
                         help='Downloads dataset')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
@@ -62,6 +64,10 @@ if __name__ == "__main__":
 
     num_classes = 10
     model = torchvision.models.mobilenet_v2(pretrained=True)
+
+    if args.freeze:
+        for param in model.parameters():
+            param.requires_grad = False
 
     model.classifier = nn.Sequential(
         nn.Dropout(0.2),
