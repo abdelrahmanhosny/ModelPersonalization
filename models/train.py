@@ -19,6 +19,8 @@ if __name__ == "__main__":
     # model parameters
     parser.add_argument('--batch_size', type=int, default=64, metavar='N', \
         help='input batch size for training (default: 64)')
+    parser.add_argument('--num_batches', type=int, default=100, metavar='N', \
+        help='number of batches to train for (not a full epoch)')
     parser.add_argument('--output_dir', type=str, required=True, \
         help='output directory')
     parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
@@ -60,7 +62,7 @@ if __name__ == "__main__":
 
     train_dataset = torchvision.datasets.CIFAR10('data/CIFAR10', \
         download=args.download, transform=transform, train=True)
-    train_dataloader = DataLoader(train_dataset, **train_kwargs)
+    train_dataloader = DataLoader(train_dataset[: args.batch_size * args.num_batches], **train_kwargs)
 
     num_classes = 10
     model = torchvision.models.mobilenet_v2(pretrained=True)
@@ -90,7 +92,7 @@ if __name__ == "__main__":
     forward_profiler = cProfile.Profile()
     backward_profiler = cProfile.Profile()
 
-    for inputs, labels in train_dataloader:
+    for batch_index, (inputs, labels) in enumerate(train_dataloader):
         # forward pass
         forward_profiler.enable()
         inputs, labels = inputs.to(device), labels.to(device)
@@ -104,6 +106,9 @@ if __name__ == "__main__":
         loss.backward()
         optimizer.step()
         backward_profiler.disable()
+
+        if (batch_index + 1) % args.num_batches == 0:
+            break
     
     with open(os.path.join(args.output_dir, str(args.batch_size) + '_train_forward.prof'), 'w') as f:
         ps = pstats.Stats(forward_profiler, stream=f).sort_stats('cumulative')
