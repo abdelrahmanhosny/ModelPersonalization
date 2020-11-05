@@ -83,6 +83,8 @@ if __name__ == "__main__":
         model.fc = nn.Linear(1024, num_classes)
     elif args.model == 'resnet18':
         model.fc = nn.Linear(512, num_classes)
+    elif args.model == 'resnet50':
+        model.fc = nn.Linear(512, num_classes)
 
     model = model.to(device)
 
