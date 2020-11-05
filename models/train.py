@@ -7,7 +7,7 @@ import torch.nn.functional as F
 import torch.nn as nn
 
 from datetime import datetime
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, SubsetRandomSampler
 from torch.optim import Adam
 from torchvision import datasets, transforms
 
@@ -44,7 +44,8 @@ if __name__ == "__main__":
     train_kwargs = {
         'batch_size': args.batch_size,
         'num_workers': os.cpu_count(),
-        'pin_memory': True
+        'pin_memory': True,
+        'sampler': SubsetRandomSampler(range(args.batch_size * args.num_batches))
     }
 
     
@@ -62,7 +63,7 @@ if __name__ == "__main__":
 
     train_dataset = torchvision.datasets.CIFAR10('data/CIFAR10', \
         download=args.download, transform=transform, train=True)
-    train_dataloader = DataLoader(train_dataset[: args.batch_size * args.num_batches], **train_kwargs)
+    train_dataloader = DataLoader(train_dataset, **train_kwargs)
 
     num_classes = 10
     model = torchvision.models.mobilenet_v2(pretrained=True)
@@ -107,6 +108,7 @@ if __name__ == "__main__":
         optimizer.step()
         backward_profiler.disable()
 
+        print(batch_index)
         if (batch_index + 1) % args.num_batches == 0:
             break
     
