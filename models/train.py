@@ -45,7 +45,7 @@ if __name__ == "__main__":
         'batch_size': args.batch_size,
         'num_workers': os.cpu_count(),
         'pin_memory': True,
-        'sampler': SubsetRandomSampler(range(args.batch_size * args.num_batches))
+        'sampler': SubsetRandomSampler(range(args.batch_size * args.num_passes))
     }
 
     
@@ -108,7 +108,7 @@ if __name__ == "__main__":
         optimizer.step()
         backward_profiler.disable()
 
-        if (batch_index + 1) % args.num_batches == 0:
+        if (batch_index + 1) % args.num_passes == 0:
             break
     
     with open(os.path.join(args.output_dir, str(args.batch_size) + '_train_forward.prof'), 'w') as f:
