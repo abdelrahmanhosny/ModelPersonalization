@@ -108,7 +108,6 @@ if __name__ == "__main__":
         optimizer.step()
         backward_profiler.disable()
 
-        print(batch_index)
         if (batch_index + 1) % args.num_batches == 0:
             break
     
