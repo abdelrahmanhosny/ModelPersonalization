@@ -17,6 +17,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Characterize training on the edge')
 
     # model parameters
+    parser.add_argument('--model', type=str, default='mobilenet_v2', \
+        help='output directory')
     parser.add_argument('--batch_size', type=int, default=64, metavar='N', \
         help='input batch size for training (default: 64)')
     parser.add_argument('--num_passes', type=int, default=10, metavar='N', \
@@ -66,16 +68,21 @@ if __name__ == "__main__":
     train_dataloader = DataLoader(train_dataset, **train_kwargs)
 
     num_classes = 10
-    model = torchvision.models.mobilenet_v2(pretrained=True)
+    model = getattr(torchvision.models, args.model)(pretrained=True)
 
     if args.freeze:
         for param in model.parameters():
             param.requires_grad = False
 
-    model.classifier = nn.Sequential(
-        nn.Dropout(0.2),
-        nn.Linear(model.last_channel, num_classes),
-    )
+    if args.model == 'mobilenet_v2':
+        model.classifier = nn.Sequential(
+            nn.Dropout(0.2),
+            nn.Linear(model.last_channel, num_classes),
+        )
+    elif args.model == 'googlenet':
+        model.fc = nn.Linear(1024, num_classes)
+    elif args.model == 'resnet18':
+        model.fc = nn.Linear(512, num_classes)
 
     model = model.to(device)
 
