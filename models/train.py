@@ -116,9 +116,6 @@ if __name__ == "__main__":
         loss.backward()
         optimizer.step()
         backward_profiler.disable()
-
-        if (batch_index + 1) % args.num_passes == 0:
-            break
     
     with open(os.path.join(args.output_dir, str(args.batch_size) + '_train_forward.prof'), 'w') as f:
         ps = pstats.Stats(forward_profiler, stream=f).sort_stats('cumulative')

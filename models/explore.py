@@ -30,8 +30,7 @@ def parse_tegrastats_file(file_path):
 
             match = re.search('CPU \[(?P<cpu1_util>[0-9]+)\%\@[0-9]+,(?P<cpu2_util>[0-9]+)\%\@[0-9]+,(?P<cpu3_util>[0-9]+)\%\@[0-9]+,(?P<cpu4_util>[0-9]+)\%\@[0-9]+\] ' ,line)
             u = (float(match.group('cpu1_util')) + float(match.group('cpu2_util')) + float(match.group('cpu3_util')) + float(match.group('cpu4_util'))) / 4
-            if u != 0:
-                cpu_utils.append(u)
+            cpu_utils.append(u)
 
             match = re.search('POM_5V_GPU [0-9]+\/(?P<gpu_power>[0-9]+)', line)
             avg_gpu_power = float(match.group('gpu_power'))
@@ -53,12 +52,12 @@ if __name__ == "__main__":
     plt.rcParams.update({'font.size': 14})
     plt.rcParams['axes.labelweight'] = 'bold'
 
-    models = ['MOBILE_NET', 'GOOGLENET', 'RESNET18', 'RESNET50']
+    models = ['mobilenet_v2', 'googlenet', 'resnet18', 'resnet50']
     legend_names = {
-        'MOBILE_NET': 'MobileNet (3.5M)',
-        'GOOGLENET': 'GoogLeNet (6.6M)',
-        'RESNET18': 'ResNet18 (11.6M)',
-        'RESNET50': 'ResNet50 (25.5M)'
+        'mobilenet_v2': 'MobileNet (3.5M)',
+        'googlenet': 'GoogLeNet (6.6M)',
+        'resnet18': 'ResNet18 (11.6M)',
+        'resnet50': 'ResNet50 (25.5M)'
     }
     y_labels = {
         'gpu_power': 'Avg. GPU Power (mW)',
@@ -82,7 +81,7 @@ if __name__ == "__main__":
     for m in models:
         metrics = defaultdict(lambda: [])
         for s in batch_size:
-            report = os.path.join('experiments', 'CIFAR10', m, mode_paths[args.mode], str(s) + '.txt')
+            report = os.path.join('experiments.new','experiments', 'CIFAR10', m, mode_paths[args.mode], str(s) + '.txt')
             avg_cpu_power, avg_gpu_power, avg_gpu_util, avg_cpu_util, avg_mem_util, total_time = parse_tegrastats_file(report)
             metrics['gpu_power'].append(avg_gpu_power)
             metrics['cpu_power'].append(avg_cpu_power)
