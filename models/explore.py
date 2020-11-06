@@ -24,11 +24,14 @@ def parse_tegrastats_file(file_path):
             mem_utils.append(float(match.group('mem_util')))
 
             match = re.search('GR3D_FREQ (?P<gpu_util>[0-9]+)\%' ,line)
-            gpu_utils.append(float(match.group('gpu_util')))
+            u = float(match.group('gpu_util'))
+            if u != 0:
+                gpu_utils.append(u)
 
             match = re.search('CPU \[(?P<cpu1_util>[0-9]+)\%\@[0-9]+,(?P<cpu2_util>[0-9]+)\%\@[0-9]+,(?P<cpu3_util>[0-9]+)\%\@[0-9]+,(?P<cpu4_util>[0-9]+)\%\@[0-9]+\] ' ,line)
-            util = (float(match.group('cpu1_util')) + float(match.group('cpu2_util')) + float(match.group('cpu3_util')) + float(match.group('cpu4_util'))) / 4
-            cpu_utils.append(util)
+            u = (float(match.group('cpu1_util')) + float(match.group('cpu2_util')) + float(match.group('cpu3_util')) + float(match.group('cpu4_util'))) / 4
+            if u != 0:
+                cpu_utils.append(u)
 
             match = re.search('POM_5V_GPU [0-9]+\/(?P<gpu_power>[0-9]+)', line)
             avg_gpu_power = float(match.group('gpu_power'))
@@ -73,7 +76,7 @@ if __name__ == "__main__":
         'cpu': 'NO_CUDA',
         'cpu_freeze': 'NO_CUDA_FREEZE'
     }
-    batch_size = [32, 64, 128, 256]
+    batch_size = [2, 4, 8, 16, 32, 64, 128, 256]
     markers = iter(['o', 'x', '+', 'd'])
 
     for m in models:

@@ -21,7 +21,7 @@ if __name__ == "__main__":
         help='output directory')
     parser.add_argument('--batch_size', type=int, default=64, metavar='N', \
         help='input batch size for training (default: 64)')
-    parser.add_argument('--num_passes', type=int, default=10, metavar='N', \
+    parser.add_argument('--num_passes', type=int, default=8, metavar='N', \
         help='number of batches to train for (not a full epoch)')
     parser.add_argument('--output_dir', type=str, required=True, \
         help='output directory')
@@ -45,11 +45,9 @@ if __name__ == "__main__":
     # setup 
     train_kwargs = {
         'batch_size': args.batch_size,
-        'num_workers': os.cpu_count(),
         'pin_memory': True,
-        'sampler': SubsetRandomSampler(range(args.batch_size * args.num_passes))
+        'sampler': SubsetRandomSampler(range(512 * args.num_passes))
     }
-
     
     # data loading and transform
     started = datetime.now()
