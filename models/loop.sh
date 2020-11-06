@@ -3,7 +3,7 @@
 DATASET=CIFAR10
 for BATCH_SIZE in 2 4 8 16 32 64 128 256 
 do
-    for MODEL in mobilenet_v2 googlenet resnet18 resnet150
+    for MODEL in mobilenet_v2 googlenet resnet18 resnet50
     do
         sleep 3
         LOG_DIR=./experiments/$DATASET/$MODEL
@@ -20,7 +20,7 @@ done
 
 for BATCH_SIZE in 2 4 8 16 32 64 128 256 
 do
-    for MODEL in mobilenet_v2 googlenet resnet18 resnet150
+    for MODEL in mobilenet_v2 googlenet resnet18 resnet50
     do
         sleep 3
         LOG_DIR=./experiments/$DATASET/$MODEL/NO_CUDA
@@ -37,7 +37,7 @@ done
 
 for BATCH_SIZE in 2 4 8 16 32 64 128 256 
 do
-    for MODEL in mobilenet_v2 googlenet resnet18 resnet150
+    for MODEL in mobilenet_v2 googlenet resnet18 resnet50
     do
         sleep 3
         LOG_DIR=./experiments/$DATASET/$MODEL/FREEZE
@@ -54,7 +54,7 @@ done
 
 for BATCH_SIZE in 2 4 8 16 32 64 128 256 
 do
-    for MODEL in mobilenet_v2 googlenet resnet18 resnet150
+    for MODEL in mobilenet_v2 googlenet resnet18 resnet50
     do
         sleep 3
         LOG_DIR=./experiments/$DATASET/$MODEL/FREEZE_NO_CUDA
