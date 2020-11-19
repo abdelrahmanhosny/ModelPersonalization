@@ -25,8 +25,7 @@ def parse_tegrastats_file(file_path):
 
             match = re.search('GR3D_FREQ (?P<gpu_util>[0-9]+)\%' ,line)
             u = float(match.group('gpu_util'))
-            if u != 0:
-                gpu_utils.append(u)
+            gpu_utils.append(u)
 
             match = re.search('CPU \[(?P<cpu1_util>[0-9]+)\%\@[0-9]+,(?P<cpu2_util>[0-9]+)\%\@[0-9]+,(?P<cpu3_util>[0-9]+)\%\@[0-9]+,(?P<cpu4_util>[0-9]+)\%\@[0-9]+\] ' ,line)
             u = (float(match.group('cpu1_util')) + float(match.group('cpu2_util')) + float(match.group('cpu3_util')) + float(match.group('cpu4_util'))) / 4
@@ -81,7 +80,7 @@ if __name__ == "__main__":
     for m in models:
         metrics = defaultdict(lambda: [])
         for s in batch_size:
-            report = os.path.join('experiments.new','experiments', 'CIFAR10', m, mode_paths[args.mode], str(s) + '.txt')
+            report = os.path.join('experiments', 'CIFAR10', m, mode_paths[args.mode], str(s) + '.txt')
             avg_cpu_power, avg_gpu_power, avg_gpu_util, avg_cpu_util, avg_mem_util, total_time = parse_tegrastats_file(report)
             metrics['gpu_power'].append(avg_gpu_power)
             metrics['cpu_power'].append(avg_cpu_power)
@@ -98,6 +97,7 @@ if __name__ == "__main__":
     plt.ylabel(y_labels[args.report])
     plt.legend()
     plt.tight_layout()
+    plt.title('Training on ' + args.mode)
 
     save_dir = os.path.join('viz', args.mode)
     if not os.path.exists(save_dir):

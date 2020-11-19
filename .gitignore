@@ -129,6 +129,5 @@ dmypy.json
 .pyre/
 data
 .DS_Store
-experiments
-experiments.new
+experiments*
 viz
